@@ -1,0 +1,166 @@
+[gd_scene load_steps=20 format=1]
+
+[ext_resource path="res://main.gd" type="Script" id=1]
+[ext_resource path="res://move_player.gd" type="Script" id=2]
+[ext_resource path="res://sprites/char_down_01.png" type="Texture" id=3]
+[ext_resource path="res://sprites/char_down_02.png" type="Texture" id=4]
+[ext_resource path="res://sprites/char_left_01.png" type="Texture" id=5]
+[ext_resource path="res://sprites/char_left_02.png" type="Texture" id=6]
+[ext_resource path="res://sprites/char_down_idle.png" type="Texture" id=7]
+[ext_resource path="res://sprites/char_up_01.png" type="Texture" id=8]
+[ext_resource path="res://sprites/char_up_02.png" type="Texture" id=9]
+[ext_resource path="res://sprites/char_right_01.png" type="Texture" id=10]
+[ext_resource path="res://sprites/char_right_02.png" type="Texture" id=11]
+[ext_resource path="res://sprites/char_up_idle.png" type="Texture" id=12]
+[ext_resource path="res://sprites/char_left_idle.png" type="Texture" id=13]
+[ext_resource path="res://sprites/char_right_idle.png" type="Texture" id=14]
+[ext_resource path="res://friend.gd" type="Script" id=15]
+[ext_resource path="res://icon_transp.png" type="Texture" id=16]
+
+[sub_resource type="CapsuleShape2D" id=1]
+
+custom_solver_bias = 0.0
+radius = 33.4791
+height = 79.1949
+
+[sub_resource type="SpriteFrames" id=2]
+
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "walk_down",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "walk_left",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": false,
+"name": "walk_down_idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "walk_up",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 10 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "walk_right",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": false,
+"name": "walk_up_idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 13 ) ],
+"loop": false,
+"name": "walk_left_idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 14 ) ],
+"loop": false,
+"name": "walk_right_idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=3]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32.1094, 30.9721 )
+
+[node name="Node" type="Node"]
+
+script/script = ExtResource( 1 )
+
+[node name="player" type="KinematicBody2D" parent="."]
+
+transform/pos = Vector2( 100, 300 )
+input/pickable = false
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, -64 )
+shapes/0/trigger = false
+collision/layers = 1
+collision/mask = 1
+collision/margin = 0.08
+script/script = ExtResource( 2 )
+
+[node name="sprite" type="AnimatedSprite" parent="player"]
+
+transform/pos = Vector2( 0, -64 )
+frames = SubResource( 2 )
+animation = "walk_right"
+playing = true
+
+[node name="Tween" type="Tween" parent="player"]
+
+playback/process_mode = 1
+playback/active = false
+playback/repeat = false
+playback/speed = 1.0
+
+[node name="collision" type="CollisionShape2D" parent="player"]
+
+transform/pos = Vector2( 0, -64 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="friend" type="StaticBody2D" parent="."]
+
+editor/display_folded = true
+transform/pos = Vector2( 779, 380 )
+z/z = -1
+input/pickable = true
+shapes/0/shape = SubResource( 3 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = true
+collision/layers = 1
+collision/mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+script/script = ExtResource( 15 )
+
+[node name="Sprite" type="Sprite" parent="friend"]
+
+z/z = 3
+texture = ExtResource( 16 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="friend"]
+
+shape = SubResource( 3 )
+trigger = true
+_update_shape_index = 0
+
+[node name="wpContainer" type="Container" parent="."]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 40.0
+margin/bottom = 40.0
+
+[connection signal="tween_complete" from="player/Tween" to="player" method="_on_Tween_tween_complete"]
+
+[connection signal="input_event" from="friend" to="friend" method="_on_friend_input_event"]
+
+[connection signal="mouse_enter" from="friend" to="player" method="_on_friend_mouse_enter"]
+
+[connection signal="mouse_enter" from="friend" to="friend" method="_on_friend_mouse_enter"]
+
+[connection signal="mouse_exit" from="friend" to="player" method="_on_friend_mouse_exit"]
+
+[connection signal="mouse_exit" from="friend" to="friend" method="_on_friend_mouse_exit"]
+
+

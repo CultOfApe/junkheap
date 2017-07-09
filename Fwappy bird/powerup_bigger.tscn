@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=1]
+
+[ext_resource path="res://powerup.gd" type="Script" id=1]
+[ext_resource path="res://graphics/donut.png" type="Texture" id=2]
+
+[sub_resource type="CapsuleShape2D" id=1]
+
+custom_solver_bias = 0.0
+radius = 12.3055
+height = 7.88024
+
+[node name="Area2D" type="Area2D"]
+
+input/pickable = true
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( -0.5, -0.866025, 0.866025, -0.5, 0.237823, 1.90262 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+script/script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+transform/pos = Vector2( 0.237823, 1.90262 )
+transform/rot = 120.0
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="tweenStretchY" type="Tween" parent="."]
+
+playback/process_mode = 1
+playback/active = false
+playback/repeat = false
+playback/speed = 1.0
+
+[node name="tweenStretchX" type="Tween" parent="."]
+
+playback/process_mode = 1
+playback/active = false
+playback/repeat = false
+playback/speed = 1.0
+
+[connection signal="body_enter" from="." to="." method="_on_Area2D_body_enter"]
+
+

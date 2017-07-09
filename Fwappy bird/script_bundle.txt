@@ -1,0 +1,99 @@
+res://powerup_blowup.gd
+
+extends Area2D
+
+signal grabbed
+
+func _ready():
+	# Called every time the node is added to the scene.
+	# Initialization here
+	pass
+
+
+func _on_Area2D_body_enter( body ):
+	emit_signal("grabbed")
+	print("grabbed")
+	queue_free()
+	
+	
+	
+	
+res://game.tscn
+
+extends Node2D
+
+onready var lvlNode = load("res://level.tscn")
+onready var birdNode = load("res://bird.tscn")
+onready var powerupNode = load("res://powerup_blowup.tscn")
+
+func _ready():
+	var lvl = lvlNode.instance()
+	var bird = birdNode.instance()
+	var powerup = powerupNode.instance()
+	
+	powerup.set_pos(Vector2(340, 200))
+	powerup.set_scale(Vector2(0.5,0.5))
+	powerup.connect("grabbed", bird, "_powerup")
+	
+	self.add_child(lvl)
+	self.add_child(bird)
+	self.add_child(powerup)
+
+func _powerup():
+	print("Eureka!")
+	
+	
+	
+	
+res://bird.tscn
+
+extends KinematicBody2D
+
+const INIT_SPEED = 100
+const GRAVITY = 10
+const ACCELERATION = 10
+const JUMP_SPEED = -600
+const MIN_JUMP_SPEED = -200
+
+var speed = INIT_SPEED
+var accMultiplier = 0
+var bird_pos = Vector2(0,0)
+var direction = Vector2(speed,150)
+var weight = 0
+
+onready var tweenStretchY = get_node("sprite/stretchVer")
+onready var tweenStretchX = get_node("sprite/stretchHor")
+onready var ray = get_node("RayCast2D")
+
+func _ready():
+	
+	tweenStretchY.interpolate_property(self, "transform/scale", get_scale(), Vector2(1,2.5), 0.5, Tween.TRANS_ELASTIC, Tween.EASE_OUT)
+	tweenStretchX.interpolate_property(self, "transform/scale", get_scale(), Vector2(2,2.5), 1, Tween.TRANS_ELASTIC, Tween.EASE_OUT)
+	
+	set_fixed_process(true)
+	set_process_input(true)
+	
+func _input(event):
+	
+	if event.is_action_pressed("ui_down"):
+		direction.y = JUMP_SPEED + weight * 40
+
+	if event.is_action_released("ui_down"):
+		if direction.y < MIN_JUMP_SPEED:
+			direction.y = MIN_JUMP_SPEED
+	
+	if event.is_action_pressed("ui_left"):
+		tweenStretchY.start()
+		tweenStretchX.start()
+		weight = 20
+	
+func _fixed_process(delta):
+	direction.y += GRAVITY + weight
+	if is_colliding():
+		print("collide!")
+	move(direction * delta)
+
+func _powerup():
+	tweenStretchY.start()
+	tweenStretchX.start()
+	weight = 10
