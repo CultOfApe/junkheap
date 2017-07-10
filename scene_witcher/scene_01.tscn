@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://scene_01.gd" type="Script" id=1]
+
+[node name="Node" type="Node"]
+
+script/script = ExtResource( 1 )
+
+[node name="Next" type="Button" parent="."]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 676.0
+margin/top = 258.0
+margin/right = 833.0
+margin/bottom = 278.0
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+text = "GO  FORTH >"
+flat = false
+
+[node name="Label" type="Label" parent="."]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 422.0
+margin/top = 102.0
+margin/right = 610.0
+margin/bottom = 165.0
+text = "SCENE 1"
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[connection signal="button_down" from="Next" to="." method="_on_Next_button_down"]
+
+
