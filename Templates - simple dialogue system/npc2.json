@@ -1,0 +1,59 @@
+{
+	"animation" : "talkanim_nellie.png",
+	"dialogue": {
+		"a": {
+			"text" : "this is dialogue A",
+			"responses" : [
+				{
+				"next": "b",
+				"reply": "goto B",
+				"variables" : [
+					{
+					"name": "node.myFlag",
+					"value": "TRUE"
+					},
+					{
+					"name": "node.money",
+					"value": -50
+					}
+				]
+				},
+				{
+				"next": "c",
+				"reply": "Goto C"
+				},		
+				{
+				"next": "exit",
+				"reply": "exit dialogue"
+				}
+				]
+		},
+		"b": {
+			"text" : "this is dialogue B",
+			"responses" : [
+				{
+				"next": "c",
+				"reply": "goto C"
+				}
+			]	
+		},
+		"c": {
+			"text" : "this is dialogue C",
+			"responses" : [
+				{
+				"next": "a",
+				"reply": "goto A"
+				}
+			]	
+		},
+		"d": {
+			"text" : "this is dialogue D",
+			"responses" : [
+				{
+				"next": "b",
+				"reply": "goto B"
+				}
+			]	
+		}		
+	}
+}
