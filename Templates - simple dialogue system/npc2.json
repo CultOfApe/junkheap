@@ -2,7 +2,7 @@
 	"animation" : "talkanim_nellie.png",
 	"dialogue": {
 		"a": {
-			"text" : "this is dialogue A",
+			"text" : "Hi. I´m NPC2. Pleased to met you!",
 			"responses" : [
 				{
 				"next": "b",

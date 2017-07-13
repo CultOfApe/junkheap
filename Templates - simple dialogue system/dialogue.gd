@@ -80,14 +80,14 @@ func dialogue_window():
 	reply_offset = 0
 
 func new_label(labels):
+	kill_dialogue()
 	for lbl in labels:
-		#if I want the panel to be instanced too, instead of always visible
-#		if lbl == "panel":
-#			var node = dialog_panel.instance()
-#			node.set_name(lbl)
-#			get_node("Panel/ui_dialogue").add_child(node)
-#		else:
-		var node = reply_button.instance()
-		node.set_name(lbl)
-		node.connect("reply_selected",self,"_pick_reply",[], CONNECT_ONESHOT)
-		get_node("ui_dialogue/Panel").add_child(node)
+		if lbl == "dialogue":
+			var node = dialog_panel.instance()
+			node.set_name(lbl)
+			get_node("ui_dialogue/Panel").add_child(node)
+		else:
+			var node = reply_button.instance()
+			node.set_name(lbl)
+			node.connect("reply_selected",self,"_pick_reply",[], CONNECT_ONESHOT)
+			get_node("ui_dialogue/Panel").add_child(node)
