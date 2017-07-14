@@ -8,6 +8,7 @@ onready var dialog_panel = load("res://asset scenes/dialogue_window.tscn")
 onready var reply_button = load("res://asset scenes/reply.tscn")
 
 onready var viewsize = get_viewport().get_rect().size
+var dialog = {"width": 800, "height": 60, "posx": 400, "posy": 370}
 
 var num_replies
 
@@ -16,11 +17,15 @@ func _ready():
 	set_fixed_process(true)
 	set_process_input(true)
 	
+	get_node("ui_dialogue/Panel").set_size(Vector2(dialog.width, dialog.height))
+	get_node("ui_dialogue/Panel").set_pos(Vector2(viewsize.x/2 - dialog.width/2, viewsize.y - dialog.posy))
+	get_node("ui_dialogue/Panel").set_opacity(0.5)
+	
 	for object in get_node("npcs").get_children():
 		object.connect("dialogue", self, "_talk_to")
 		print("NPC connected.")
 #
-	start_dialogue(npc_dialogue)
+#	start_dialogue(npc_dialogue)
 
 func _talk_to(dialogue, branch):
 	npc_dialogue = {"dialogue": dialogue, "branch": branch}
@@ -45,12 +50,6 @@ func start_dialogue(json):
 	for n in range(0,num_replies):
 		get_node("ui_dialogue/Panel/reply" + str(n+1)).set_text(talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["reply"])
 		
-	#the below if-statement is necessary because of a bug that will make the NPC unresponsive to click, if start_dialogue() not called from _ready()
-	#check github issue for more info, and please help if you can :)
-	#https://github.com/CultOfApe/junkheap/issues/1
-	if debug["dialogue"] == "res://dialogue/empty.json":
-		kill_dialogue()
-		
 func load_json(json, type):
 	var file = File.new();
 	file.open(json["dialogue"], File.READ);
@@ -69,11 +68,7 @@ func dialogue_window():
 		
 	new_label(labels)
 	
-	var dialog = {"width": 800, "height": 100, "posx": 400, "posy": 370}
-	
 	get_node("ui_dialogue/Panel").set_size(Vector2(dialog.width, dialog.height + num_replies*30))
-	get_node("ui_dialogue/Panel").set_pos(Vector2(viewsize.x/2 - dialog.posx, viewsize.y - dialog.posy))
-	get_node("ui_dialogue/Panel").set_opacity(0.5)
 	
 	for n in range(num_replies):
 		get_node("ui_dialogue/Panel/reply" + str(n+1)).set_size(Vector2(400, 50))
