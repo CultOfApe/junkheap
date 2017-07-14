@@ -1,7 +1,8 @@
 extends Node2D
 
-var npc_dialogue = {"dialogue": "res://dialogue/npc1.json", "branch": "a"}
+var npc_dialogue = {"dialogue": "res://dialogue/empty.json", "branch": "a"}
 var talk_data = {}
+var debug
 
 onready var dialog_panel = load("res://asset scenes/dialogue_window.tscn")
 onready var reply_button = load("res://asset scenes/reply.tscn")
@@ -18,7 +19,7 @@ func _ready():
 	for object in get_node("npcs").get_children():
 		object.connect("dialogue", self, "_talk_to")
 		print("NPC connected.")
-
+#
 	start_dialogue(npc_dialogue)
 
 func _talk_to(dialogue, branch):
@@ -44,13 +45,21 @@ func start_dialogue(json):
 	for n in range(0,num_replies):
 		get_node("ui_dialogue/Panel/reply" + str(n+1)).set_text(talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["reply"])
 		
+	#the below if-statement is necessary because of a bug that will make the NPC unresponsive to click, if start_dialogue() not called from _ready()
+	#check github issue for more info, and please help if you can :)
+	#https://github.com/CultOfApe/junkheap/issues/1
+	if debug["dialogue"] == "res://dialogue/empty.json":
+		kill_dialogue()
+		
 func load_json(json, type):
 	var file = File.new();
 	file.open(json["dialogue"], File.READ);
 	talk_data.parse_json(file.get_as_text())
 	file.close()
+	debug = json
 
 func dialogue_window():
+		
 	var reply_offset = 0
 	var labels = ["dialogue"]
 	

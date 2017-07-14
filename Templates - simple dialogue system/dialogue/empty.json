@@ -1,0 +1,12 @@
+{
+	"animation": "empty.png",
+	"dialogue": {
+		"a": {
+			"text": "",
+			"responses": [{
+				"next": "",
+				"reply": ""
+			}]
+		}
+	}
+}

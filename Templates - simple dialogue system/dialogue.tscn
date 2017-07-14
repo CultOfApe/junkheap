@@ -66,27 +66,11 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="TextEdit" type="TextEdit" parent="ui_dialogue"]
-
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = 657.0
-margin/top = 498.0
-margin/right = 909.0
-margin/bottom = 573.0
-syntax_highlighting = false
-show_line_numbers = false
-highlight_all_occurrences = false
-caret/block_caret = false
-caret/caret_blink = false
-caret/caret_blink_speed = 0.65
-
 [node name="npcs" type="Node" parent="."]
 
 [node name="npc1" type="Area2D" parent="npcs"]
 
+editor/display_folded = true
 transform/pos = Vector2( 419.886, 94.5358 )
 input/pickable = true
 shapes/0/shape = SubResource( 1 )
@@ -131,6 +115,7 @@ max_lines_visible = -1
 
 [node name="npc2" type="Area2D" parent="npcs"]
 
+editor/display_folded = true
 transform/pos = Vector2( 567.215, 95.7635 )
 input/pickable = true
 shapes/0/shape = SubResource( 2 )
