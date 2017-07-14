@@ -1,10 +1,10 @@
 extends Node2D
 
-var npc_dialogue = {"dialogue": "res://npc1.json", "branch": "a"}
+var npc_dialogue = {"dialogue": "res://dialogue/npc1.json", "branch": "a"}
 var talk_data = {}
 
-onready var dialog_panel = load("res://dialogue_window.tscn")
-onready var reply_button = load("res://reply.tscn")
+onready var dialog_panel = load("res://asset scenes/dialogue_window.tscn")
+onready var reply_button = load("res://asset scenes/reply.tscn")
 
 onready var viewsize = get_viewport().get_rect().size
 
@@ -17,7 +17,7 @@ func _ready():
 	
 	for object in get_node("npcs").get_children():
 		object.connect("dialogue", self, "_talk_to")
-		object.connect("look_at", self, "_look_at")
+		print("NPC connected.")
 
 	start_dialogue(npc_dialogue)
 
@@ -50,16 +50,11 @@ func load_json(json, type):
 	talk_data.parse_json(file.get_as_text())
 	file.close()
 
-func kill_dialogue():
-	for x in get_node("ui_dialogue/Panel").get_children():
-		x.set_name("DELETED") #to make sure node doesn´t cause issues before being deleted
-		x.queue_free()
-
 func dialogue_window():
 	var reply_offset = 0
 	var labels = ["dialogue"]
 	
-	#add one element "reply" per number of replies in game_data
+	#add one element "reply" per number of replies in talk_data
 	for n in range(num_replies):
 		labels.push_back("reply" + str(n+1))
 		
@@ -91,3 +86,8 @@ func new_label(labels):
 			node.set_name(lbl)
 			node.connect("reply_selected",self,"_pick_reply",[], CONNECT_ONESHOT)
 			get_node("ui_dialogue/Panel").add_child(node)
+
+func kill_dialogue():
+	for x in get_node("ui_dialogue/Panel").get_children():
+		x.set_name("DELETED") #to make sure node doesn´t cause issues before being deleted
+		x.queue_free()

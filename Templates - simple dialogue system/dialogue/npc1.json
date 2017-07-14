@@ -1,8 +1,8 @@
 {
-	"animation" : "talkanim_nellie.png",
+	"animation" : "npc1.png",
 	"dialogue": {
 		"a": {
-			"text" : "Hi. I´m NPC2. Pleased to met you!",
+			"text" : "Hi. I´m NPC1. Pleased to met you! This is dialogue A.",
 			"responses" : [
 				{
 				"next": "b",
@@ -34,6 +34,10 @@
 				{
 				"next": "c",
 				"reply": "goto C"
+				},		
+				{
+				"next": "exit",
+				"reply": "exit dialogue"
 				}
 			]	
 		},
@@ -43,6 +47,10 @@
 				{
 				"next": "a",
 				"reply": "goto A"
+				},		
+				{
+				"next": "exit",
+				"reply": "exit dialogue"
 				}
 			]	
 		},
@@ -52,6 +60,10 @@
 				{
 				"next": "b",
 				"reply": "goto B"
+				},		
+				{
+				"next": "exit",
+				"reply": "exit dialogue"
 				}
 			]	
 		}		

@@ -32,9 +32,58 @@ margin/top = 0.0
 margin/right = 1024.0
 margin/bottom = 600.0
 
-[node name="npcs" type="Node" parent="."]
+[node name="Label" type="Label" parent="ui_dialogue"]
 
-editor/display_folded = true
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 50.0
+margin/top = 462.0
+margin/right = 966.0
+margin/bottom = 712.0
+text = "This is a demo of my simple json-based dialogue system. It´s fairly basic but does it´s job well, and should be fairly easy to port to your game.
+
+to contact me:
+Github: https://github.com/CultOfApe
+Facebook: https://www.facebook.com/cultofape/"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="click us" type="Label" parent="ui_dialogue"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 432.0
+margin/top = 33.0
+margin/right = 550.0
+margin/bottom = 47.0
+text = "CLICK US TO TALK!"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="TextEdit" type="TextEdit" parent="ui_dialogue"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 657.0
+margin/top = 498.0
+margin/right = 909.0
+margin/bottom = 573.0
+syntax_highlighting = false
+show_line_numbers = false
+highlight_all_occurrences = false
+caret/block_caret = false
+caret/caret_blink = false
+caret/caret_blink_speed = 0.65
+
+[node name="npcs" type="Node" parent="."]
 
 [node name="npc1" type="Area2D" parent="npcs"]
 
@@ -65,6 +114,21 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="npc1_label" type="Label" parent="npcs/npc1"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = -17.0
+margin/top = 41.0
+margin/right = 23.0
+margin/bottom = 55.0
+text = "NPC1"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
 [node name="npc2" type="Area2D" parent="npcs"]
 
 transform/pos = Vector2( 567.215, 95.7635 )
@@ -93,6 +157,21 @@ _update_shape_index = 0
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="npc2_label" type="Label" parent="npcs/npc2"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = -18.0
+margin/top = 40.0
+margin/right = 22.0
+margin/bottom = 54.0
+text = "NPC2"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
 
 [connection signal="input_event" from="npcs/npc1" to="npcs/npc1" method="_on_npc1_input_event"]
 

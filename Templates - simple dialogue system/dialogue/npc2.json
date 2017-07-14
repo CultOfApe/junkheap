@@ -1,8 +1,8 @@
 {
-	"animation" : "npc1.png",
+	"animation" : "npc2.png",
 	"dialogue": {
 		"a": {
-			"text" : "Hi. I´m NPC1. Pleased to met you!",
+			"text" : "Hi. I´m NPC2. Pleased to met you! This is dialogue A.",
 			"responses" : [
 				{
 				"next": "b",
