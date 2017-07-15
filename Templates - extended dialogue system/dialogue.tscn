@@ -80,6 +80,7 @@ max_lines_visible = -1
 
 [node name="npc2" type="Area2D" parent="npcs"]
 
+editor/display_folded = true
 transform/pos = Vector2( 567.215, 95.7635 )
 input/pickable = true
 shapes/0/shape = SubResource( 2 )
@@ -122,26 +123,36 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Label" type="Label" parent="."]
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+
+frames = SubResource( 3 )
+animation = "default"
+
+[node name="ui" type="Node" parent="."]
+
+[node name="description" type="Label" parent="ui"]
 
 focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
 margin/left = 50.0
-margin/top = 462.0
-margin/right = 966.0
-margin/bottom = 712.0
-text = "This is a demo of my simple json-based dialogue system. It´s fairly basic but does it´s job well, and should be fairly easy to port to your game.
+margin/top = 443.0
+margin/right = 974.0
+margin/bottom = 693.0
+text = "This is a demo of my extended json-based dialogue system. It´s built upon my simple dialogue system, adding:
 
-to contact me:
-Github: https://github.com/CultOfApe
-Facebook: https://www.facebook.com/cultofape/"
+- selecting replies with keyboard, 
+- dynamic name-labels
+- talking animations, and (soon) 
+- ability to change variables through dialogue choices. 
+
+It should be fairly easy to port to your game."
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="click us" type="Label" parent="."]
+[node name="click us" type="Label" parent="ui"]
 
 focus/ignore_mouse = true
 focus/stop_mouse = true
@@ -156,10 +167,54 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+[node name="cookies" type="Label" parent="ui"]
 
-frames = SubResource( 3 )
-animation = "default"
+rect/scale = Vector2( 2, 2 )
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 835.0
+margin/top = 28.0
+margin/right = 900.0
+margin/bottom = 42.0
+text = "cookies: 0"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="milk" type="Label" parent="ui"]
+
+rect/scale = Vector2( 2, 2 )
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 835.0
+margin/top = 71.0
+margin/right = 879.0
+margin/bottom = 85.0
+text = "milk: 0"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="contact" type="Label" parent="ui"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 653.0
+margin/top = 529.0
+margin/right = 960.0
+margin/bottom = 577.0
+text = "to contact me:
+Github: https://github.com/CultOfApe
+Facebook: https://www.facebook.com/cultofape/"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
 
 [connection signal="input_event" from="npcs/npc1" to="npcs/npc1" method="_on_npc1_input_event"]
 

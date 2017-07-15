@@ -36,7 +36,7 @@ func _input(event):
 			for reply in reply_container:
 				get_node(reply).add_color_override("font_color", Color(1,1,1))
 			get_node(reply_container[reply_current]).add_color_override("font_color", Color(1,0,1))
-		if event.is_action_pressed("ui_accept"):
+		if event.is_action_pressed("ui_accept") and reply_current != -1:
 			_pick_reply(reply_current)
 
 
@@ -46,6 +46,10 @@ func _talk_to(dialogue, branch, name):
 
 func _pick_reply(n):
 	reply_current =-1
+	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n].has("variables"):
+		print("This reply had variables!")
+		for value in talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"]:
+			print(value)
 	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"] != "exit":
 		npc_dialogue["branch"] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"]
 		start_dialogue(npc_dialogue)
@@ -58,7 +62,7 @@ func _reply_mouseover(mouseover, reply):
 		reply_current = reply
 	elif mouseover == "FALSE":
 		reply_mouseover = "FALSE"
-		reply_current = 0
+		reply_current = -1
 	
 func start_dialogue(json):
 	load_json(json, "dialogue")
