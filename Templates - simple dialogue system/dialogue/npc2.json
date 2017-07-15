@@ -1,4 +1,5 @@
 {
+	"name": "NPC1",
 	"animation" : "npc2.png",
 	"dialogue": {
 		"a": {

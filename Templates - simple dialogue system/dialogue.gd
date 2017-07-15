@@ -1,6 +1,6 @@
 extends Node2D
 
-var npc_dialogue = {"dialogue": "res://dialogue/empty.json", "branch": "a"}
+var npc_dialogue = {}
 var talk_data = {}
 var debug
 
@@ -17,15 +17,8 @@ func _ready():
 	set_fixed_process(true)
 	set_process_input(true)
 	
-	get_node("ui_dialogue/Panel").set_size(Vector2(dialog.width, dialog.height))
-	get_node("ui_dialogue/Panel").set_pos(Vector2(viewsize.x/2 - dialog.width/2, viewsize.y - dialog.posy))
-	get_node("ui_dialogue/Panel").set_opacity(0.5)
-	
 	for object in get_node("npcs").get_children():
 		object.connect("dialogue", self, "_talk_to")
-		print("NPC connected.")
-#
-#	start_dialogue(npc_dialogue)
 
 func _talk_to(dialogue, branch):
 	npc_dialogue = {"dialogue": dialogue, "branch": branch}
@@ -43,12 +36,13 @@ func start_dialogue(json):
 	num_replies = talk_data["dialogue"][npc_dialogue["branch"]]["responses"].size()
 	
 	#setup dialog window
-	dialogue_window()
+	setup_dialogue_window()
 	
 	#set text and reply in dialogue panel
-	get_node("ui_dialogue/Panel/dialogue").set_text(talk_data["dialogue"][npc_dialogue["branch"]]["text"])
+	get_node("ui_dialogue/dialogue").set_text(talk_data["dialogue"][npc_dialogue["branch"]]["text"])
 	for n in range(0,num_replies):
-		get_node("ui_dialogue/Panel/reply" + str(n+1)).set_text(talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["reply"])
+
+		get_node("ui_dialogue/reply" + str(n+1)).set_text(talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["reply"])
 		
 func load_json(json, type):
 	var file = File.new();
@@ -57,41 +51,51 @@ func load_json(json, type):
 	file.close()
 	debug = json
 
-func dialogue_window():
+func setup_dialogue_window():
 		
 	var reply_offset = 0
-	var labels = ["dialogue"]
+	var labels = ["panel","dialogue"]
 	
 	#add one element "reply" per number of replies in talk_data
 	for n in range(num_replies):
 		labels.push_back("reply" + str(n+1))
 		
-	new_label(labels)
+	create_labels(labels)
 	
-	get_node("ui_dialogue/Panel").set_size(Vector2(dialog.width, dialog.height + num_replies*30))
+	get_node("ui_dialogue/panel").set_size(Vector2(dialog.width, dialog.height + num_replies*30))
+	get_node("ui_dialogue/panel").set_pos(Vector2(viewsize.x/2 - dialog.width/2, viewsize.y - dialog.posy))
+	get_node("ui_dialogue/panel").set_opacity(0.5)
+	
+	get_node("ui_dialogue/dialogue").set_size(Vector2(dialog.width -20, dialog.height + num_replies*30))
+	get_node("ui_dialogue/dialogue").set_pos(Vector2(viewsize.x/2 + 10 - dialog.width/2, viewsize.y - dialog.posy + 20))
 	
 	for n in range(num_replies):
-		get_node("ui_dialogue/Panel/reply" + str(n+1)).set_size(Vector2(400, 50))
-		get_node("ui_dialogue/Panel/reply" + str(n+1)).set_pos(Vector2(viewsize.x/2 - dialog.posx-100, viewsize.y - 550 + reply_offset))
-		get_node("ui_dialogue/Panel/reply" + str(n+1)).num_reply = n
+		get_node("ui_dialogue/reply" + str(n+1)).set_size(Vector2(400, 50))
+		get_node("ui_dialogue/reply" + str(n+1)).set_pos(Vector2(viewsize.x/2 - dialog.posx+10, viewsize.y - 300 + reply_offset))
+		get_node("ui_dialogue/reply" + str(n+1)).num_reply = n
 		reply_offset += 30
 
 	reply_offset = 0
 
-func new_label(labels):
+func create_labels(labels):
 	kill_dialogue()
 	for lbl in labels:
+		if lbl == "panel":
+			var node = Panel.new()
+			node.set_name(lbl)
+			get_node("ui_dialogue").add_child(node)
 		if lbl == "dialogue":
 			var node = dialog_panel.instance()
 			node.set_name(lbl)
-			get_node("ui_dialogue/Panel").add_child(node)
-		else:
+			get_node("ui_dialogue").add_child(node)
+		#if I do "else:" code creates one reply too many, so this was the solution. Weird..
+		if "reply" in lbl:
 			var node = reply_button.instance()
 			node.set_name(lbl)
 			node.connect("reply_selected",self,"_pick_reply",[], CONNECT_ONESHOT)
-			get_node("ui_dialogue/Panel").add_child(node)
+			get_node("ui_dialogue").add_child(node)
 
 func kill_dialogue():
-	for x in get_node("ui_dialogue/Panel").get_children():
+	for x in get_node("ui_dialogue/").get_children():
 		x.set_name("DELETED") #to make sure node doesn´t cause issues before being deleted
 		x.queue_free()
