@@ -16,6 +16,7 @@ animations = [ {
 
 frames = SubResource( 1 )
 animation = "default"
+frame = 1
 playing = true
 
 

@@ -10,35 +10,61 @@ onready var reply_button = load("res://asset scenes/reply.tscn")
 onready var viewsize = get_viewport().get_rect().size
 var dialog = {"width": 1000, "height": 60, "posx": 500, "posy": 370}
 
-var num_replies
 var npc_name
 var talk_anim
 
+var num_replies
+var reply_container = []
+var reply_mouseover = "FALSE"
+var reply_current = -1
+
 func _ready():
-	set_process(true)
-	set_fixed_process(true)
 	set_process_input(true)
 	
 	for object in get_node("npcs").get_children():
 		object.connect("dialogue", self, "_talk_to")
+
+func _input(event):
+	if reply_mouseover == "FALSE":
+		if event.is_action_pressed("ui_down") and reply_current != num_replies-1:
+			reply_current += 1
+			for reply in reply_container:
+				get_node(reply).add_color_override("font_color", Color(1,1,1))
+			get_node(reply_container[reply_current]).add_color_override("font_color", Color(1,0,1))
+		if event.is_action_pressed("ui_up") and reply_current != 0:
+			reply_current -= 1
+			for reply in reply_container:
+				get_node(reply).add_color_override("font_color", Color(1,1,1))
+			get_node(reply_container[reply_current]).add_color_override("font_color", Color(1,0,1))
+		if event.is_action_pressed("ui_accept"):
+			_pick_reply(reply_current)
+
 
 func _talk_to(dialogue, branch, name):
 	npc_dialogue = {"name": name,"dialogue": dialogue, "branch": branch}
 	start_dialogue(npc_dialogue)
 
 func _pick_reply(n):
+	reply_current =-1
 	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"] != "exit":
 		npc_dialogue["branch"] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"]
 		start_dialogue(npc_dialogue)
 	else:
 		kill_dialogue()
+
+func _reply_mouseover(mouseover, reply):
+	if mouseover == "TRUE":
+		reply_mouseover = "TRUE"
+		reply_current = reply
+	elif mouseover == "FALSE":
+		reply_mouseover = "FALSE"
+		reply_current = 0
 	
 func start_dialogue(json):
 	load_json(json, "dialogue")
 	npc_name = talk_data["name"]
 	talk_anim = talk_data["animation"]
-	print(npc_name)
-	print(talk_anim)
+
 	num_replies = talk_data["dialogue"][npc_dialogue["branch"]]["responses"].size()
 	
 	#setup dialog window
@@ -48,7 +74,7 @@ func start_dialogue(json):
 	get_node("ui_dialogue/dialogue/name").set_text(npc_name)
 	get_node("ui_dialogue/dialogue").set_text(talk_data["dialogue"][npc_dialogue["branch"]]["text"])
 	for n in range(0,num_replies):
-
+		reply_container.push_back("ui_dialogue/reply" + str(n+1))
 		get_node("ui_dialogue/reply" + str(n+1)).set_text(talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["reply"])
 		
 func load_json(json, type):
@@ -106,9 +132,13 @@ func create_labels(labels):
 			var node = reply_button.instance()
 			node.set_name(lbl)
 			node.connect("reply_selected",self,"_pick_reply",[], CONNECT_ONESHOT)
+			node.connect("reply_mouseover",self,"_reply_mouseover")
 			get_node("ui_dialogue").add_child(node)
 
 func kill_dialogue():
 	for x in get_node("ui_dialogue/").get_children():
 		x.set_name("DELETED") #to make sure node doesn´t cause issues before being deleted
 		x.queue_free()
+	reply_container = []
+
+	
