@@ -1,23 +1,12 @@
 {
 	"name": "NPC1",
-	"animation" : "npc1.png",
 	"dialogue": {
 		"a": {
 			"text" : "Hi. I´m NPC1. Pleased to met you! This is dialogue A.",
 			"responses" : [
 				{
 				"next": "b",
-				"reply": "goto B",
-				"variables" : [
-					{
-					"name": "node.myFlag",
-					"value": "TRUE"
-					},
-					{
-					"name": "node.money",
-					"value": -50
-					}
-				]
+				"reply": "goto B"
 				},
 				{
 				"next": "c",
