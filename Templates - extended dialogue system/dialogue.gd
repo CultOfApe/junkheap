@@ -8,9 +8,11 @@ onready var dialog_panel = load("res://asset scenes/dialogue_window.tscn")
 onready var reply_button = load("res://asset scenes/reply.tscn")
 
 onready var viewsize = get_viewport().get_rect().size
-var dialog = {"width": 800, "height": 60, "posx": 400, "posy": 370}
+var dialog = {"width": 1000, "height": 60, "posx": 500, "posy": 370}
 
 var num_replies
+var npc_name
+var talk_anim
 
 func _ready():
 	set_process(true)
@@ -20,8 +22,8 @@ func _ready():
 	for object in get_node("npcs").get_children():
 		object.connect("dialogue", self, "_talk_to")
 
-func _talk_to(dialogue, branch):
-	npc_dialogue = {"dialogue": dialogue, "branch": branch}
+func _talk_to(dialogue, branch, name):
+	npc_dialogue = {"name": name,"dialogue": dialogue, "branch": branch}
 	start_dialogue(npc_dialogue)
 
 func _pick_reply(n):
@@ -33,12 +35,17 @@ func _pick_reply(n):
 	
 func start_dialogue(json):
 	load_json(json, "dialogue")
+	npc_name = talk_data["name"]
+	talk_anim = talk_data["animation"]
+	print(npc_name)
+	print(talk_anim)
 	num_replies = talk_data["dialogue"][npc_dialogue["branch"]]["responses"].size()
 	
 	#setup dialog window
 	setup_dialogue_window()
 	
 	#set text and reply in dialogue panel
+	get_node("ui_dialogue/dialogue/name").set_text(npc_name)
 	get_node("ui_dialogue/dialogue").set_text(talk_data["dialogue"][npc_dialogue["branch"]]["text"])
 	for n in range(0,num_replies):
 
@@ -67,13 +74,19 @@ func setup_dialogue_window():
 	get_node("ui_dialogue/panel").set_opacity(0.5)
 	
 	get_node("ui_dialogue/dialogue").set_size(Vector2(dialog.width -20, dialog.height + num_replies*30))
-	get_node("ui_dialogue/dialogue").set_pos(Vector2(viewsize.x/2 + 10 - dialog.width/2, viewsize.y - dialog.posy + 20))
+	get_node("ui_dialogue/dialogue").set_pos(Vector2(viewsize.x/2 + 100 - dialog.width/2, viewsize.y - dialog.posy + 20))
 	
 	for n in range(num_replies):
 		get_node("ui_dialogue/reply" + str(n+1)).set_size(Vector2(400, 50))
-		get_node("ui_dialogue/reply" + str(n+1)).set_pos(Vector2(viewsize.x/2 - dialog.posx+10, viewsize.y - 300 + reply_offset))
+		get_node("ui_dialogue/reply" + str(n+1)).set_pos(Vector2(viewsize.x/2 +100 - dialog.width/2, viewsize.y - 300 + reply_offset))
 		get_node("ui_dialogue/reply" + str(n+1)).num_reply = n
 		reply_offset += 30
+	
+	talk_anim = load("res://asset scenes/" + npc_name + "_talkanim.tscn")
+	talk_anim = talk_anim.instance()
+	talk_anim.set_scale(Vector2(1.5,1.5))
+	talk_anim.set_pos(Vector2(viewsize.x/2 + 40 - dialog.width/2, viewsize.y - dialog.posy + 20))
+	get_node("ui_dialogue").add_child(talk_anim)
 
 	reply_offset = 0
 

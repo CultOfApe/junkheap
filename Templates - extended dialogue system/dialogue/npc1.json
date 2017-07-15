@@ -1,6 +1,6 @@
 {
 	"name": "NPC1",
-	"animation" : "npc1.png",
+	"animation" : "res://asset scenes/NPC1_talkanim.tscn",
 	"dialogue": {
 		"a": {
 			"text" : "Hi. I´m NPC1. Pleased to met you! This is dialogue A.",

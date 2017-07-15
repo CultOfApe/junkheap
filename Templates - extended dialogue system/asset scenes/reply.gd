@@ -14,5 +14,4 @@ func _on_reply_mouse_exit():
 
 func _on_reply_input_event( ev ):
 	if ev.type == InputEvent.MOUSE_BUTTON and ev.button_index == BUTTON_LEFT and ev.is_pressed():
-		print(num_reply)
 		emit_signal("reply_selected",num_reply)
