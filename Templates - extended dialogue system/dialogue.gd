@@ -18,6 +18,10 @@ var reply_container = []
 var reply_mouseover = "FALSE"
 var reply_current = -1
 
+var game_vars = {"milk": 0, "cookies": 0}
+var milk = 0
+var cookies = 0
+
 func _ready():
 	set_process_input(true)
 	
@@ -46,15 +50,27 @@ func _talk_to(dialogue, branch, name):
 
 func _pick_reply(n):
 	reply_current =-1
+	
 	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n].has("variables"):
-		print("This reply had variables!")
-		for value in talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"]:
-			print(value)
+		for item in range(0, talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"].size()):
+			var name = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["name"]
+			game_vars[name] += talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["value"]
+			if game_vars[name] < 0:
+				game_vars[name] = 0
+		update_game_vars(game_vars)
+		
 	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"] != "exit":
 		npc_dialogue["branch"] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"]
 		start_dialogue(npc_dialogue)
+		
 	else:
 		kill_dialogue()
+
+func update_game_vars(vars):
+	cookies = game_vars["cookies"]
+	milk = game_vars["milk"]
+	get_node("ui/cookies").set_text("cookies: " + str(cookies))
+	get_node("ui/milk").set_text("milk: " + str(milk))
 
 func _reply_mouseover(mouseover, reply):
 	if mouseover == "TRUE":
@@ -87,7 +103,7 @@ func load_json(json, type):
 	talk_data.parse_json(file.get_as_text())
 	file.close()
 	debug = json
-
+		
 func setup_dialogue_window():
 		
 	var reply_offset = 0

@@ -10,12 +10,12 @@
 				"reply": "goto B",
 				"variables" : [
 					{
-					"name": "node.myFlag",
-					"value": "TRUE"
+					"name": "milk",
+					"value": 1
 					},
 					{
-					"name": "node.money",
-					"value": -50
+					"name": "cookies",
+					"value": 1
 					}
 				]
 				},
