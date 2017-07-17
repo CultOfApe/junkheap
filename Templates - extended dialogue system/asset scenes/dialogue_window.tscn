@@ -4,8 +4,8 @@
 
 [node name="dialogue" type="Label"]
 
-focus/ignore_mouse = true
-focus/stop_mouse = true
+focus/ignore_mouse = false
+focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 0
 margin/left = 0.0
@@ -33,5 +33,7 @@ text = "Name"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+
+[connection signal="input_event" from="." to="." method="_on_dialogue_input_event"]
 
 

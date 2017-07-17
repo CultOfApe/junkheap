@@ -3,7 +3,10 @@
 	"animation" : "res://asset scenes/NPC2_talkanim.tscn",
 	"dialogue": {
 		"a": {
-			"text" : "Hi. I´m NPC2. Pleased to met you! This is dialogue A.",
+			"text" : [
+					"Hi. I´m NPC1. Pleased to met you! This is dialogue A. Click anywhere with LMB to go to the next chunk of text.",
+					"You clicked and the text changed. Neat, huh?"
+					],
 			"responses" : [
 				{
 				"next": "b",
@@ -30,7 +33,9 @@
 				]
 		},
 		"b": {
-			"text" : "this is dialogue B",
+			"text" : [
+					"this is dialogue B"
+					],
 			"responses" : [
 				{
 				"next": "c",
@@ -43,7 +48,9 @@
 			]	
 		},
 		"c": {
-			"text" : "this is dialogue C",
+			"text" : [
+					"this is dialogue C"
+					],
 			"responses" : [
 				{
 				"next": "a",
@@ -56,7 +63,9 @@
 			]	
 		},
 		"d": {
-			"text" : "this is dialogue D",
+			"text" : [
+					"this is dialogue D"
+					],
 			"responses" : [
 				{
 				"next": "b",

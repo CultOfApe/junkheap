@@ -13,7 +13,9 @@ var dialog = {"width": 1000, "height": 60, "posx": 500, "posy": 370}
 var npc_name
 var talk_anim
 
-var num_replies
+var num_dialogue_text = 0
+var num_replies = 0
+var page_index = 0
 var reply_container = []
 var reply_mouseover = "FALSE"
 var reply_current = -1
@@ -43,6 +45,15 @@ func _input(event):
 		if event.is_action_pressed("ui_accept") and reply_current != -1:
 			_pick_reply(reply_current)
 
+		if event.is_action_pressed("ui_accept"):
+			print(page_index)
+			print(num_dialogue_text-1)
+			
+func _dialogue_clicked():
+	print("function running")
+	if page_index < num_dialogue_text-1:    
+		page_index += 1
+		start_dialogue(npc_dialogue)
 
 func _talk_to(dialogue, branch, name):
 	npc_dialogue = {"name": name,"dialogue": dialogue, "branch": branch}
@@ -61,9 +72,11 @@ func _pick_reply(n):
 		
 	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"] != "exit":
 		npc_dialogue["branch"] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"]
+		page_index = 0
 		start_dialogue(npc_dialogue)
 		
 	else:
+#		page_index = 0
 		kill_dialogue()
 
 func update_game_vars(vars):
@@ -85,6 +98,7 @@ func start_dialogue(json):
 	npc_name = talk_data["name"]
 	talk_anim = talk_data["animation"]
 
+	num_dialogue_text = talk_data["dialogue"][npc_dialogue["branch"]]["text"].size()
 	num_replies = talk_data["dialogue"][npc_dialogue["branch"]]["responses"].size()
 	
 	#setup dialog window
@@ -92,10 +106,17 @@ func start_dialogue(json):
 	
 	#set text and reply in dialogue panel
 	get_node("ui_dialogue/dialogue/name").set_text(npc_name)
-	get_node("ui_dialogue/dialogue").set_text(talk_data["dialogue"][npc_dialogue["branch"]]["text"])
-	for n in range(0,num_replies):
-		reply_container.push_back("ui_dialogue/reply" + str(n+1))
-		get_node("ui_dialogue/reply" + str(n+1)).set_text(talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["reply"])
+	
+	#preparing for dialogue paging, the 0 will be replaced by ´n´, ´n´ being order of item in text array
+	get_node("ui_dialogue/dialogue").set_text(talk_data["dialogue"][npc_dialogue["branch"]]["text"][page_index])
+	
+	print(page_index)
+	print(num_dialogue_text-1)
+	
+	if page_index == num_dialogue_text-1:
+		for n in range(0,num_replies):
+			reply_container.push_back("ui_dialogue/reply" + str(n+1))
+			get_node("ui_dialogue/reply" + str(n+1)).set_text(talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["reply"])
 		
 func load_json(json, type):
 	var file = File.new();
@@ -122,11 +143,12 @@ func setup_dialogue_window():
 	get_node("ui_dialogue/dialogue").set_size(Vector2(dialog.width -20, dialog.height + num_replies*30))
 	get_node("ui_dialogue/dialogue").set_pos(Vector2(viewsize.x/2 + 100 - dialog.width/2, viewsize.y - dialog.posy + 20))
 	
-	for n in range(num_replies):
-		get_node("ui_dialogue/reply" + str(n+1)).set_size(Vector2(400, 50))
-		get_node("ui_dialogue/reply" + str(n+1)).set_pos(Vector2(viewsize.x/2 +100 - dialog.width/2, viewsize.y - 300 + reply_offset))
-		get_node("ui_dialogue/reply" + str(n+1)).num_reply = n
-		reply_offset += 30
+	if page_index == num_dialogue_text-1:
+		for n in range(num_replies):
+			get_node("ui_dialogue/reply" + str(n+1)).set_size(Vector2(400, 50))
+			get_node("ui_dialogue/reply" + str(n+1)).set_pos(Vector2(viewsize.x/2 +100 - dialog.width/2, viewsize.y - 300 + reply_offset))
+			get_node("ui_dialogue/reply" + str(n+1)).num_reply = n
+			reply_offset += 30
 	
 	talk_anim = load("res://asset scenes/" + npc_name + "_talkanim.tscn")
 	talk_anim = talk_anim.instance()
@@ -146,6 +168,7 @@ func create_labels(labels):
 		if lbl == "dialogue":
 			var node = dialog_panel.instance()
 			node.set_name(lbl)
+			node.connect("dialogueClicked", self, "_dialogue_clicked")
 			get_node("ui_dialogue").add_child(node)
 		#if I do "else:" code creates one reply too many, so this was the solution. Weird..
 		if "reply" in lbl:
