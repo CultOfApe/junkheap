@@ -2,7 +2,6 @@ extends Node2D
 
 var npc_dialogue = {}
 var talk_data = {}
-var debug
 
 onready var dialog_panel = load("res://asset scenes/dialogue_window.tscn")
 onready var reply_button = load("res://asset scenes/reply.tscn")
@@ -42,15 +41,14 @@ func _input(event):
 			for reply in reply_container:
 				get_node(reply).add_color_override("font_color", Color(1,1,1))
 			get_node(reply_container[reply_current]).add_color_override("font_color", Color(1,0,1))
-		if event.is_action_pressed("ui_accept") and reply_current != -1:
-			_pick_reply(reply_current)
-
 		if event.is_action_pressed("ui_accept"):
-			print(page_index)
-			print(num_dialogue_text-1)
+			if reply_current != -1:
+				_pick_reply(reply_current)
+			if page_index < num_dialogue_text-1:    
+				page_index += 1
+				start_dialogue(npc_dialogue)
 			
 func _dialogue_clicked():
-	print("function running")
 	if page_index < num_dialogue_text-1:    
 		page_index += 1
 		start_dialogue(npc_dialogue)
@@ -76,7 +74,7 @@ func _pick_reply(n):
 		start_dialogue(npc_dialogue)
 		
 	else:
-#		page_index = 0
+		page_index = 0
 		kill_dialogue()
 
 func update_game_vars(vars):
@@ -109,9 +107,6 @@ func start_dialogue(json):
 	
 	#preparing for dialogue paging, the 0 will be replaced by ´n´, ´n´ being order of item in text array
 	get_node("ui_dialogue/dialogue").set_text(talk_data["dialogue"][npc_dialogue["branch"]]["text"][page_index])
-	
-	print(page_index)
-	print(num_dialogue_text-1)
 	
 	if page_index == num_dialogue_text-1:
 		for n in range(0,num_replies):
@@ -171,16 +166,19 @@ func create_labels(labels):
 			node.connect("dialogueClicked", self, "_dialogue_clicked")
 			get_node("ui_dialogue").add_child(node)
 		#if I do "else:" code creates one reply too many, so this was the solution. Weird..
-		if "reply" in lbl:
-			var node = reply_button.instance()
-			node.set_name(lbl)
-			node.connect("reply_selected",self,"_pick_reply",[], CONNECT_ONESHOT)
-			node.connect("reply_mouseover",self,"_reply_mouseover")
-			get_node("ui_dialogue").add_child(node)
+		#FIX TOMORROW: don´t even create reply nodes if page_index == num_dialogue_text-1. Will solve nodes in upper left corner
+		if page_index == num_dialogue_text-1:
+			if "reply" in lbl:
+				var node = reply_button.instance()
+				node.set_name(lbl)
+				node.connect("reply_selected",self,"_pick_reply",[], CONNECT_ONESHOT)
+				node.connect("reply_mouseover",self,"_reply_mouseover")
+				get_node("ui_dialogue").add_child(node)
 
 func kill_dialogue():
 	for x in get_node("ui_dialogue/").get_children():
 		x.set_name("DELETED") #to make sure node doesn´t cause issues before being deleted
+		x.set_pos(Vector2(-1000,-1000))
 		x.queue_free()
 	reply_container = []
 
