@@ -1,0 +1,7 @@
+Simple Dialogue System (SDS)
+
+Barebones dialogue system
+-Displays dialogue text and replies in a box
+-Dialogue box resizes dynamically to fit more replies
+-Select replies with mouse
+-Exit dialogue by clicking exit dialogue or ESC
