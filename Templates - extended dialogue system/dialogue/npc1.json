@@ -1,81 +1,126 @@
 {
 	"name": "NPC1",
-	"animation" : "res://asset scenes/NPC1_talkanim.tscn",
+	"animation": "res://asset scenes/NPC1_talkanim.tscn",
 	"dialogue": {
 		"a": {
-			"text" : [
-					"Hi. I´m NPC1. Pleased to met you! This is dialogue A. Click anywhere with LMB to go to the next chunk of text.",
-					"You clicked and the text changed. Neat, huh?"
-					],
-			"responses" : [
-				{
+			"text": [
+				"Hi. Are you hungry? I am. NPC2 is holding all the cookies to himself.",
+				"Could you please ask him to share some with us?"
+			],
+			"responses": [{
 				"next": "b",
-				"reply": "goto B",
-				"variables" : [
-					{
-					"name": "milk",
-					"value": 1
-					},
-					{
-					"name": "cookies",
-					"value": 1
-					}
-				]
+				"reply": "Sure, I will ask him right away!",
+				"exit": "false"
 				},
 				{
 				"next": "c",
-				"reply": "Goto C"
-				},		
-				{
-				"next": "exit",
-				"reply": "exit dialogue"
+				"reply": "I´m sorry, but I can´t do that right now.",
+				"exit": "false"
 				}
-				]
+			]
 		},
 		"b": {
-			"text" : [
-					"this is dialogue B"
-					],
-			"responses" : [
-				{
-				"next": "c",
-				"reply": "goto C"
-				},		
-				{
-				"next": "exit",
-				"reply": "exit dialogue"
-				}
-			]	
+			"text": [
+				"Really?! That´s great!"
+			],
+			"responses": [{
+				"next": "d",
+				"reply": "I´ll be right back!",
+				"exit": "true",
+				"variables": [{
+						"name": "cookieQuest",
+						"value": 1
+					}
+				]
+			}]
 		},
 		"c": {
-			"text" : [
-					"this is dialogue C"
-					],
-			"responses" : [
-				{
-				"next": "a",
-				"reply": "goto A"
-				},		
-				{
-				"next": "exit",
-				"reply": "exit dialogue"
-				}
-			]	
+			"text": [
+				"Oh, that´s too bad. I´ll just sit here and starve then..."
+			],
+			"responses": [{
+				"next": "e",
+				"reply": "..ok.",
+				"exit": "true"
+			}]
 		},
 		"d": {
-			"text" : [
-					"this is dialogue D"
-					],
-			"responses" : [
+			"text": [
+				"Did you get the cookies?"
+			],
+			"responses": [{
+				"next": "d",
+				"reply": "not yet..",
+				"exit": "true"
+			}]
+		},
+		"e": {
+			"text": [
+				"Hi again. Have you possibly changed your mind about the cookies?"
+			],
+			"responses": [{
+					"next": "b",
+					"reply": "Sure, I will ask him right away!",
+					"exit": "false"
+				},
 				{
-				"next": "b",
-				"reply": "goto B"
-				},		
-				{
-				"next": "exit",
-				"reply": "exit dialogue"
+					"next": "c",
+					"reply": "No..",
+					"exit": "false"
 				}
-			]	
-		}		
+			]
+		},
+		"f": {
+			"text": [
+				"He wants milk, huh? Ok, here, give him this glass of milk."
+			],
+			"responses": [{
+					"next": "g",
+					"reply": "On my way!",
+					"exit": "true",
+				"variables": [{
+						"name": "cookieQuest",
+						"value": 3
+					}]
+				}
+			]
+		},
+		"g": {
+			"text": [
+				"You got the milk alread! Go get the cookies."
+			],
+			"responses": [{
+					"next": "f",
+					"reply": "on my way!",
+					"exit": "true"
+				}
+			]
+		},
+		"h": {
+			"text": [
+				"You got the cookies?! Gimme!"
+			],
+			"responses": [{
+					"next": "i",
+					"reply": "One´s for me, let´s eat them together.",
+					"exit": "false",
+				"variables": [{
+						"name": "cookieQuest",
+						"value": 5
+					}]
+				}
+			]
+		},
+		"i": {
+			"text": [
+				"End of demo."
+			],
+			"responses": [{
+					"next": "i",
+					"reply": "...",
+					"exit": "true"
+				}
+			]
+		}
 	}
 }

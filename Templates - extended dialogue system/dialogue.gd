@@ -19,7 +19,7 @@ var reply_container = []
 var reply_mouseover = "FALSE"
 var reply_current = -1
 
-var game_vars = {"milk": 0, "cookies": 0}
+var game_vars = {"milk": 0, "cookies": 0, "cookieQuest": 0}
 var milk = 0
 var cookies = 0
 
@@ -28,6 +28,16 @@ func _ready():
 	
 	for object in get_node("npcs").get_children():
 		object.connect("dialogue", self, "_talk_to")
+
+func game_progression():
+	if game_vars["cookieQuest"] == 1:
+		get_node("npcs/npc2").identity.branch = "c"
+	if game_vars["cookieQuest"] == 2:
+		get_node("npcs/npc1").identity.branch = "f"
+	if game_vars["cookieQuest"] == 3:
+		get_node("npcs/npc2").identity.branch = "e"
+	if game_vars["cookieQuest"] == 4:
+		get_node("npcs/npc1").identity.branch = "h"
 
 func _input(event):
 	if reply_mouseover == "FALSE":
@@ -63,25 +73,31 @@ func _pick_reply(n):
 	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n].has("variables"):
 		for item in range(0, talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"].size()):
 			var name = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["name"]
-			game_vars[name] += talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["value"]
-			if game_vars[name] < 0:
-				game_vars[name] = 0
+			game_vars[name] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["value"]
+#		TODO:check if value is int, add to game_var value
+#			game_vars[name] += talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["value"]
+#		TODO: not sure what the below did, but with the new code it doesn´t work. Look into...
+#			if game_vars[name] < 0:
+#				game_vars[name] = 0
 		update_game_vars(game_vars)
 		
-	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"] != "exit":
+	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["exit"] != "true":
 		npc_dialogue["branch"] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"]
 		page_index = 0
 		start_dialogue(npc_dialogue)
 		
 	else:
 		page_index = 0
+		npc_dialogue["branch"] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"]
+		print(npc_dialogue.name)
+		get_node("npcs/" + npc_dialogue.name.to_lower()).identity = {"dialogue": "res://dialogue/"  + npc_dialogue.name.to_lower() + ".json", "branch": npc_dialogue.branch, "name": npc_dialogue.name}
+		game_progression()
 		kill_dialogue()
 
 func update_game_vars(vars):
-	cookies = game_vars["cookies"]
-	milk = game_vars["milk"]
-	get_node("ui/cookies").set_text("cookies: " + str(cookies))
-	get_node("ui/milk").set_text("milk: " + str(milk))
+#	get_node("ui/cookies").set_text("cookies: " + str(cookies))
+#	get_node("ui/milk").set_text("milk: " + str(milk))
+	print(game_vars)
 
 func _reply_mouseover(mouseover, reply):
 	if mouseover == "TRUE":
@@ -118,7 +134,6 @@ func load_json(json, type):
 	file.open(json["dialogue"], File.READ);
 	talk_data.parse_json(file.get_as_text())
 	file.close()
-	debug = json
 		
 func setup_dialogue_window():
 		
@@ -165,8 +180,6 @@ func create_labels(labels):
 			node.set_name(lbl)
 			node.connect("dialogueClicked", self, "_dialogue_clicked")
 			get_node("ui_dialogue").add_child(node)
-		#if I do "else:" code creates one reply too many, so this was the solution. Weird..
-		#FIX TOMORROW: don´t even create reply nodes if page_index == num_dialogue_text-1. Will solve nodes in upper left corner
 		if page_index == num_dialogue_text-1:
 			if "reply" in lbl:
 				var node = reply_button.instance()
