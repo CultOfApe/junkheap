@@ -36,7 +36,6 @@ instance dialogue.tscn into your project
 
 add the following script to every Area that contains an NPC:
 
-
 extends Area2D #obviously change this depending on if its Area or Area2D
 
 signal dialogue(a,b,c)
