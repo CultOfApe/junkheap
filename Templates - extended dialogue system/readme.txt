@@ -13,6 +13,8 @@ Ape´s Dynamic Dialogue System (ADDS)
 - change game variables through dialogue decisions
 - character progression flags
 
+I fully expect the below todo´s to be final by end of July. Really have no choice as I plan to integrate all this into my main project, the "Phil Troy"-game by then :D
+
 TODO:
 - change "responses" to "replies" in json for consistency (Done in local repository)
 - change names of variables and functions for consistency (Done in local repository)
@@ -39,7 +41,7 @@ a flag in the dialogue json to tell the engine to load the event json.
 
 So, 
 
-- character progression dictates which branch character follows in the current dialogue tree
+- dialogue progression dictates which branch character follows in the current dialogue tree
 - event progression dictates which dialogue tree character follows, but also things like which scenes and items are available
 
 TO USE IN YOUR PROJECT (unfinished instructions):
