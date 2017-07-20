@@ -27,11 +27,10 @@
 				"next": "d",
 				"reply": "I´ll be right back!",
 				"exit": "true",
-				"variables": [{
-						"name": "cookieQuest",
-						"value": 1
-					}
-				]
+				"progression": [{
+						"affected": "npc2",
+						"branch": "c"
+				}]
 			}]
 		},
 		"c": {
@@ -79,9 +78,13 @@
 					"reply": "On my way!",
 					"exit": "true",
 				"variables": [{
-						"name": "cookieQuest",
-						"value": 3
-					}]
+						"name": "milk",
+						"value": 1
+				}],
+				"progression": [{
+						"affected": "npc2",
+						"branch": "e"
+				}]
 				}
 			]
 		},
@@ -104,10 +107,10 @@
 					"next": "i",
 					"reply": "One´s for me, let´s eat them together.",
 					"exit": "false",
-				"variables": [{
-						"name": "cookieQuest",
-						"value": 5
-					}]
+				"progression": [{
+						"affected": "npc1",
+						"branch": "i"
+				}]
 				}
 			]
 		},

@@ -20,24 +20,12 @@ var reply_mouseover = "FALSE"
 var reply_current = -1
 
 var game_vars = {"milk": 0, "cookies": 0, "cookieQuest": 0}
-var milk = 0
-var cookies = 0
 
 func _ready():
 	set_process_input(true)
 	
 	for object in get_node("npcs").get_children():
 		object.connect("dialogue", self, "_talk_to")
-
-func game_progression():
-	if game_vars["cookieQuest"] == 1:
-		get_node("npcs/npc2").identity.branch = "c"
-	if game_vars["cookieQuest"] == 2:
-		get_node("npcs/npc1").identity.branch = "f"
-	if game_vars["cookieQuest"] == 3:
-		get_node("npcs/npc2").identity.branch = "e"
-	if game_vars["cookieQuest"] == 4:
-		get_node("npcs/npc1").identity.branch = "h"
 
 func _input(event):
 	if reply_mouseover == "FALSE":
@@ -74,12 +62,18 @@ func _pick_reply(n):
 		for item in range(0, talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"].size()):
 			var name = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["name"]
 			game_vars[name] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["value"]
-#		TODO:check if value is int, add to game_var value
-#			game_vars[name] += talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["value"]
-#		TODO: not sure what the below did, but with the new code it doesn´t work. Look into...
-#			if game_vars[name] < 0:
-#				game_vars[name] = 0
-		update_game_vars(game_vars)
+			#if value is a float or an int, add to existing value
+			if (typeof(talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["value"])) == 2:
+				game_vars[name] += talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["value"]
+			else:
+				game_vars[name] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["variables"][item]["value"]
+		#print how many milk and cookies you have, mostly for debugging
+		print("You have: " + str(game_vars.milk) + " milk")
+		print("You have: " + str(game_vars.cookies) + " cookies")
+	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n].has("progression"):
+		for item in range(0, talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["progression"].size()):
+			var affected = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["progression"][item]["affected"]
+			get_node("npcs/" + affected).identity.branch = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["progression"][item]["branch"]
 		
 	if talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["exit"] != "true":
 		npc_dialogue["branch"] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"]
@@ -89,15 +83,8 @@ func _pick_reply(n):
 	else:
 		page_index = 0
 		npc_dialogue["branch"] = talk_data["dialogue"][npc_dialogue["branch"]]["responses"][n]["next"]
-		print(npc_dialogue.name)
 		get_node("npcs/" + npc_dialogue.name.to_lower()).identity = {"dialogue": "res://dialogue/"  + npc_dialogue.name.to_lower() + ".json", "branch": npc_dialogue.branch, "name": npc_dialogue.name}
-		game_progression()
 		kill_dialogue()
-
-func update_game_vars(vars):
-#	get_node("ui/cookies").set_text("cookies: " + str(cookies))
-#	get_node("ui/milk").set_text("milk: " + str(milk))
-	print(game_vars)
 
 func _reply_mouseover(mouseover, reply):
 	if mouseover == "TRUE":

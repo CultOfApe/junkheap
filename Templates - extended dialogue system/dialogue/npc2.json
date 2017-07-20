@@ -31,11 +31,10 @@
 				"next": "d",
 				"reply": "Milk..cookies.. ok. I´ll see what I can do.",
 				"exit": "true",
-				"variables": [{
-						"name": "cookieQuest",
-						"value": 2
-					}
-				]
+				"progression": [{
+						"affected": "npc1",
+						"branch": "f"
+				}]
 			}]
 		},
 		"d": {
@@ -57,10 +56,14 @@
 					"reply": "Thanks alot!",
 					"exit": "true",
 				"variables": [{
-						"name": "cookieQuest",
-						"value": 4
-					}
-				]
+						"name": "cookies",
+						"value": 2,
+
+				}],
+				"progression": [{
+						"affected": "npc1",
+						"branch": "h"
+				}]
 				}
 			]
 		},
