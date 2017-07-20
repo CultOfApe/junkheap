@@ -11,7 +11,7 @@ Ape´s Dynamic Dialogue System (ADDS)
 - Dialogue text paging, allowing for longer dialogue
 - Cycle through replies with arrow keys, select with SPACE or ENTER
 - change game variables through dialogue decisions
-- character progression flags
+- dialogue and event progression flags
 
 I fully expect the below todo´s to be final by end of July. Really have no choice as I plan to integrate all this into my main project, the "Phil Troy"-game by then :D
 
