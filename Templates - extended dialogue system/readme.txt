@@ -34,7 +34,7 @@ TODO:
 - add support in json for background image (Done in local repository, no checks in dialogue.gd yet)
 - alot of cleanup to make code more readable at a glance. Right now understanding what´s going on in the code requires a bit of patience (I have added some guiding comments though):P
 
-At first glance, having both character progression and event section might seem superfluous. Couldn´t you have them in the same section, as they´re both about game progression?
+At first glance, having both dialogue progression and event section might seem superfluous. Couldn´t you have them in the same section, as they´re both about game progression?
 Yes you could, but I prefer to separate them, since progression should just be about character dialogue progression, whereas events could concievably
 affect a large portion of the game, thus making dialogue trees difficult to overview. So, the idea is that every event has a separate json file, and 
 a flag in the dialogue json to tell the engine to load the event json.
@@ -67,5 +67,10 @@ func _on_npc1_input_event( viewport, event, shape_idx ):
 			emit_signal("dialogue", identity.dialogue, identity.branch, identity.name)
 
 ###
+
+game variables are held by a dictionary, gameVars, simply because that was the easiest way I could come up with.
+
+ex.
+gameVars = {"milk": 0, "cookies": 0, "event": {name: "start", stage: 1}
 
 If any questions, feel free to message me on Discord or Facebook (links on my profile)
