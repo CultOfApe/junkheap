@@ -16,22 +16,22 @@ Ape´s Dynamic Dialogue System (ADDS)
 I fully expect the below todo´s to be final by end of July. Really have no choice as I plan to integrate all this into my main project, the "Phil Troy"-game by then :D
 
 TODO:
-- change "responses" to "replies" in json for consistency (Done in local repository)
-- change names of variables and functions for consistency (Done in local repository)
+- change "responses" to "replies" in json for consistency (Done)
+- change names of variables and functions for consistency (Done)
 	ex.
 	vars should be camel case, ie num_replies should be numReplies
 	functions should be snake case, ie my_function()
 	constants should be upper case, ie viewsize should be VIEWSIZE
-- if no replies, clicking on last dialogue page closes down dialogue (Done in local repository)
-- add game progression flags, might affect not only characters (Done in local repository, no checks in dialogue.gd yet)
+- if no replies, clicking on last dialogue page closes down dialogue (Done)
+- add game progression flags, might affect not only characters (Done, no checks in dialogue.gd yet)
 	#events can have several stages
 	ex:
 	"event": [{
 	"name": "Milk and cookies"
 	"stage": 1
 	}]
-- Dialogue animations should be settable per dialogue branch ()DONE in json (local repository). Remains to reflect that change in dialogue.gd
-- add support in json for background image (Done in local repository, no checks in dialogue.gd yet)
+- Dialogue animations should be settable per dialogue branch (DONE in json. No checks in dialogue.gd yet)
+- add support in json for background image (Done, no checks in dialogue.gd yet)
 - alot of cleanup to make code more readable at a glance. Right now understanding what´s going on in the code requires a bit of patience (I have added some guiding comments though):P
 
 At first glance, having both dialogue progression and event section might seem superfluous. Couldn´t you have them in the same section, as they´re both about game progression?

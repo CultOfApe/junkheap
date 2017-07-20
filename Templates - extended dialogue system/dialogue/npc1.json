@@ -1,13 +1,14 @@
 {
 	"name": "NPC1",
-	"animation": "res://asset scenes/NPC1_talkanim.tscn",
+	"background": "background.png",
 	"dialogue": {
 		"a": {
+			"animation": "res://asset scenes/NPC1_talkanim.tscn",
 			"text": [
 				"Hi. Are you hungry? I am. NPC2 is holding all the cookies to himself.",
 				"Could you please ask him to share some with us?"
 			],
-			"responses": [{
+			"replies": [{
 				"next": "b",
 				"reply": "Sure, I will ask him right away!",
 				"exit": "false"
@@ -23,41 +24,35 @@
 			"text": [
 				"Really?! That´s great!"
 			],
-			"responses": [{
+			"replies": [{
 				"next": "d",
 				"reply": "I´ll be right back!",
 				"exit": "true",
 				"progression": [{
 						"affected": "npc2",
 						"branch": "c"
+				}],
+				"event": [{
+						"name": "Milk and cookies",
+						"stage": 1
 				}]
 			}]
 		},
 		"c": {
 			"text": [
 				"Oh, that´s too bad. I´ll just sit here and starve then..."
-			],
-			"responses": [{
-				"next": "e",
-				"reply": "..ok.",
-				"exit": "true"
-			}]
+			]
 		},
 		"d": {
 			"text": [
-				"Did you get the cookies?"
-			],
-			"responses": [{
-				"next": "d",
-				"reply": "not yet..",
-				"exit": "true"
-			}]
+				"Where are the cookies?"
+			]
 		},
 		"e": {
 			"text": [
 				"Hi again. Have you possibly changed your mind about the cookies?"
 			],
-			"responses": [{
+			"replies": [{
 					"next": "b",
 					"reply": "Sure, I will ask him right away!",
 					"exit": "false"
@@ -73,7 +68,7 @@
 			"text": [
 				"He wants milk, huh? Ok, here, give him this glass of milk."
 			],
-			"responses": [{
+			"replies": [{
 					"next": "g",
 					"reply": "On my way!",
 					"exit": "true",
@@ -90,20 +85,14 @@
 		},
 		"g": {
 			"text": [
-				"You got the milk alread! Go get the cookies."
-			],
-			"responses": [{
-					"next": "f",
-					"reply": "on my way!",
-					"exit": "true"
-				}
+				"You got the milk already! Go get the cookies."
 			]
 		},
 		"h": {
 			"text": [
 				"You got the cookies?! Gimme!"
 			],
-			"responses": [{
+			"replies": [{
 					"next": "i",
 					"reply": "One´s for me, let´s eat them together.",
 					"exit": "false",
@@ -117,12 +106,6 @@
 		"i": {
 			"text": [
 				"End of demo."
-			],
-			"responses": [{
-					"next": "i",
-					"reply": "...",
-					"exit": "true"
-				}
 			]
 		}
 	}
