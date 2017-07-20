@@ -29,3 +29,24 @@ TODO:
 	}]
 - Dialogue animations should be settable per dialogue branch
 	changes DONE in json (local repository). Remains to reflect that change in dialogue.gd
+
+To use in your project (unfinished instructions)
+
+instance dialogue.tscn into your project
+
+add the following script to every Area that contains an NPC:
+
+
+extends Area2D #obviously change this depending on if its Area or Area2D
+
+signal dialogue(a,b,c)
+
+var identity = {"dialogue": "res://dialogue/npc1.json", "branch": "a", "name": "NPC1"}
+
+func _ready():
+	pass
+
+func _on_npc1_input_event( viewport, event, shape_idx ):
+	if event.type == InputEvent.MOUSE_BUTTON and event.button_index == BUTTON_LEFT:
+		if event.is_pressed():
+			emit_signal("dialogue", identity.dialogue, identity.branch, identity.name)
